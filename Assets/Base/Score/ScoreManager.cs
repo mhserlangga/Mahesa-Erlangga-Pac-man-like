@@ -29,8 +29,8 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        _maxScore = 0;
-        _score = 0;
-        UpdateUI();
+        //_maxScore = 0;
+        //_score = 0;
+        //UpdateUI();
     }
 }

@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -27,25 +30,36 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator _animator;
 
-    private Rigidbody _rigidbody;
+    private CharacterController _controller;
     private Coroutine _powerUpCoroutine;
     private bool _isPoweredUp;
     private float _rotationVelocity;
+    private Vector3 _playerVelocity;
+    private bool _isGrounded;
+    public float gravityValue = -9.81f;
+    private bool _isInvincible = false;
+
 
     public void Dead()
     {
         _health -= 1;
+        UpdateUI(); // Pindahkan UpdateUI ke atas agar UI update sebelum respawn
 
         if (_health > 0)
         {
+            // Ganti cara respawn agar lebih aman untuk CharacterController
+            _controller.enabled = false;
             transform.position = _respawnPoint.position;
+            _controller.enabled = true;
+
+            // Mulai periode kebal
+            StartCoroutine(InvincibilityCoroutine());
         }
         else
         {
             _health = 0;
             SceneManager.LoadScene("LoseScene");
         }
-        UpdateUI();
     }
 
     public void PickPowerUp()
@@ -75,6 +89,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    private IEnumerator InvincibilityCoroutine()
+    {
+        Debug.Log("Player kebal!");
+        _isInvincible = true;
+
+        yield return new WaitForSeconds(1.5f);
+
+        _isInvincible = false;
+        Debug.Log("Player tidak lagi kebal.");
+    }
+
     private void HideAndLockCursor()
     {
         Cursor.visible = false;
@@ -84,18 +109,24 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         UpdateUI();
-        _rigidbody = GetComponent<Rigidbody>();
+        _controller = GetComponent<CharacterController>();
         HideAndLockCursor();
     }
 
     void Update()
     {
+        _isGrounded = _controller.isGrounded;
+        if (_isGrounded && _playerVelocity.y < 0)
+        {
+            _playerVelocity.y = -2f;
+        }
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 movementDirection = new Vector3(horizontal, 0, vertical);
+        Vector3 movementDirection = new Vector3(horizontal, 0, vertical).normalized;
 
-        if (movementDirection.magnitude >+ 0.1)
+        if (movementDirection.magnitude >= 0.1f)
         {
             float rotationAngle = Mathf.Atan2(movementDirection.x, movementDirection.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
             float smoothAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, rotationAngle, ref _rotationVelocity, _rotationTime);
@@ -103,18 +134,34 @@ public class Player : MonoBehaviour
             movementDirection = Quaternion.Euler(0, rotationAngle, 0f) * Vector3.forward;
         }
 
-        _rigidbody.AddForce(movementDirection * _speed * Time.deltaTime);
+        _controller.Move(movementDirection.normalized * _speed * Time.deltaTime);
 
-        _animator.SetFloat("Velocity", _rigidbody.velocity.magnitude);
+        _playerVelocity.y += gravityValue * Time.deltaTime;
+        _controller.Move(_playerVelocity * Time.deltaTime);
+
+        //float horizontalVelocity = new Vector3(_controller.velocity.x, 0, _controller.velocity.z).magnitude;
+        _animator.SetFloat("Velocity", movementDirection.magnitude);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if(_isPoweredUp)
+        // Jika sedang kebal, abaikan semua tabrakan dengan musuh
+        if (_isInvincible) return;
+
+        if (hit.gameObject.CompareTag("Enemy"))
         {
-            if (collision.gameObject.CompareTag("Enemy"))
+            // ... sisa kode di dalam method ini tetap sama ...
+            Enemy enemy = hit.gameObject.GetComponent<Enemy>();
+            if (_isPoweredUp)
             {
-                collision.gameObject.GetComponent<Enemy>().Dead();
+                enemy.Dead();
+            }
+            else
+            {
+                if (enemy._currentState != enemy.RetreatState)
+                {
+                    this.Dead();
+                }
             }
         }
     }

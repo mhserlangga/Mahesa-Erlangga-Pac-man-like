@@ -10,7 +10,7 @@ public class PatrolState : BaseState
     public void EnterState(Enemy enemy)
     { 
         _isMoving = false;
-        enemy.Animator.SetTrigger("Patrol");
+        enemy.NavMeshAgent.speed = enemy.PatrolSpeed;
     }
 
     public void UpdateState(Enemy enemy)
