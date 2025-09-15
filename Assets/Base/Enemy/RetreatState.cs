@@ -6,11 +6,7 @@ public class RetreatState : BaseState
 {
     public void EnterState(Enemy enemy)
     {
-        Debug.Log("Entering Patrol State");
-        if (enemy != null)
-        {
-            enemy.Animator.SetTrigger("Retreat");
-        }
+        enemy.NavMeshAgent.speed = enemy.ChaseSpeed;
     }
     public void UpdateState(Enemy enemy)
     {

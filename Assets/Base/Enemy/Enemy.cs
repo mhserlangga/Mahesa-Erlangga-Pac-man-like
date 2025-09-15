@@ -11,8 +11,12 @@ public class Enemy : MonoBehaviour
     public float ChaseDistance;
     [SerializeField]
     public Player Player;
+    [SerializeField]
+    public float PatrolSpeed;
+    [SerializeField]
+    public float ChaseSpeed;
 
-    private BaseState _currentState;
+    public BaseState _currentState;
 
     [HideInInspector]
     public PatrolState PatrolState = new PatrolState();
@@ -49,9 +53,9 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         Animator = GetComponent<Animator>();
+        NavMeshAgent = GetComponent<NavMeshAgent>();
         _currentState = PatrolState;
         _currentState.EnterState(this);
-        NavMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -69,6 +73,7 @@ public class Enemy : MonoBehaviour
         {
             _currentState.UpdateState(this);
         }
+        Animator.SetFloat("Velocity", NavMeshAgent.velocity.magnitude);
     }
 
     private void StartRetreating()
@@ -84,14 +89,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (_currentState != RetreatState)
-        {
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                collision.gameObject.GetComponent<Player>().Dead();
-            }
-        }
-    }
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    if (_currentState != RetreatState)
+    //    {
+    //        if (collision.gameObject.CompareTag("Player"))
+    //        {
+    //            collision.gameObject.GetComponent<Player>().Dead();
+    //        }
+    //    }
+    //}
 }
