@@ -600,7 +600,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Blue Light
+  m_text: Clear Room
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f6aaada5f87b0e84b97cb354717c7c59, type: 2}
   m_sharedMaterial: {fileID: 9222527464897771166, guid: f6aaada5f87b0e84b97cb354717c7c59, type: 2}
