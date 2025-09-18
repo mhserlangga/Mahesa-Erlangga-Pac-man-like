@@ -9,6 +9,10 @@ public class PickableList : MonoBehaviour
     private Player _player;
     [SerializeField]
     private ScoreManager _scoreManager;
+    [SerializeField]
+    private string _winScreenName;
+    [SerializeField]
+    private AudioSource _pickUpSFX;
 
     private List<Pickable> _pickableList = new List<Pickable>();
  
@@ -37,10 +41,14 @@ public class PickableList : MonoBehaviour
         {
             _player.PickPowerUp();
         }
+        else
+        {
+            _pickUpSFX.Play();
+        }
 
         if (_pickableList.Count <= 0)
         {
-            SceneManager.LoadScene("WinScene");
+            SceneManager.LoadScene(_winScreenName);
         }
     }
 }

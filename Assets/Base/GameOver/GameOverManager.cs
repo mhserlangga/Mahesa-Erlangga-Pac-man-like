@@ -6,6 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class GameOverManager : MonoBehaviour
 {
+    [SerializeField]
+    private string _gameSceneName;
+    [SerializeField]
+    private string _mainMenuSceneName;
+
     public void Start()
     {
         Cursor.visible = true;
@@ -14,11 +19,11 @@ public class GameOverManager : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene("GamePlay");
+        SceneManager.LoadScene(_gameSceneName);
     }
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(_mainMenuSceneName);
     }
 }

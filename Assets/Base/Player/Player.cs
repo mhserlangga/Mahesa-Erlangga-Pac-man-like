@@ -29,6 +29,14 @@ public class Player : MonoBehaviour
     private float _rotationTime = 0.1f;
     [SerializeField]
     private Animator _animator;
+    [SerializeField]
+    private string _loseScreenName;
+    [SerializeField]
+    private AudioSource _powerUpSFX;
+    [SerializeField]
+    private AudioSource _powerDownSFX;
+    [SerializeField]
+    private AudioSource _deathSFX;
 
     private CharacterController _controller;
     private Coroutine _powerUpCoroutine;
@@ -43,22 +51,21 @@ public class Player : MonoBehaviour
     public void Dead()
     {
         _health -= 1;
-        UpdateUI(); // Pindahkan UpdateUI ke atas agar UI update sebelum respawn
+        UpdateUI();
+        _deathSFX.Play();
 
         if (_health > 0)
         {
-            // Ganti cara respawn agar lebih aman untuk CharacterController
             _controller.enabled = false;
             transform.position = _respawnPoint.position;
             _controller.enabled = true;
 
-            // Mulai periode kebal
             StartCoroutine(InvincibilityCoroutine());
         }
         else
         {
             _health = 0;
-            SceneManager.LoadScene("LoseScene");
+            SceneManager.LoadScene(_loseScreenName);
         }
     }
 
@@ -75,6 +82,7 @@ public class Player : MonoBehaviour
     private IEnumerator StartPowerUp()
     {
         _isPoweredUp = true;
+        _powerUpSFX.Play();
         if (onPowerUpStart != null)
         {  
             onPowerUpStart(); 
@@ -82,6 +90,7 @@ public class Player : MonoBehaviour
 
         yield return new WaitForSeconds(_powerUpDuration);
         _isPoweredUp = false;
+        _powerDownSFX.Play();
 
         if (onPowerUpStop != null)
         {
@@ -145,12 +154,10 @@ public class Player : MonoBehaviour
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // Jika sedang kebal, abaikan semua tabrakan dengan musuh
         if (_isInvincible) return;
 
         if (hit.gameObject.CompareTag("Enemy"))
         {
-            // ... sisa kode di dalam method ini tetap sama ...
             Enemy enemy = hit.gameObject.GetComponent<Enemy>();
             if (_isPoweredUp)
             {
@@ -168,6 +175,6 @@ public class Player : MonoBehaviour
 
     private void UpdateUI()
     {
-        _healthText.text = "Health: " + _health;
+        _healthText.text = _health.ToString();
     }
 }

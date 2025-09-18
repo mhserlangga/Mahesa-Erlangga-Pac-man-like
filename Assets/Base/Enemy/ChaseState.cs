@@ -6,6 +6,7 @@ public class ChaseState : BaseState
 {
     public void EnterState(Enemy enemy)
     {
+        enemy.ChaseSFX.Play();
         enemy.NavMeshAgent.speed = enemy.ChaseSpeed;
 
     }

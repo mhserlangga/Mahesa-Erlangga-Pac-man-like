@@ -15,6 +15,8 @@ public class Enemy : MonoBehaviour
     public float PatrolSpeed;
     [SerializeField]
     public float ChaseSpeed;
+    [SerializeField]
+    public AudioSource ChaseSFX;
 
     public BaseState _currentState;
 
