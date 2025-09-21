@@ -92,8 +92,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 2
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -139,7 +139,7 @@ MonoBehaviour:
     value: 0
   postExposure:
     overrideState: 1
-    value: 0.5
+    value: 1.7
   contrast:
     overrideState: 1
     value: -5
@@ -175,10 +175,10 @@ MonoBehaviour:
     value: {x: 0.9659739, y: 0.9744804, z: 1, w: 0.09467456}
   gamma:
     overrideState: 1
-    value: {x: 0.94545794, y: 0.9844531, z: 1, w: 0.030768948}
+    value: {x: 0.94545794, y: 0.9844531, z: 1, w: 0.1254435}
   gain:
     overrideState: 1
-    value: {x: 0.90536016, y: 0.94261026, z: 1, w: 0.39763284}
+    value: {x: 0.90536016, y: 0.94261026, z: 1, w: 0.60591656}
   masterCurve:
     overrideState: 0
     value:
