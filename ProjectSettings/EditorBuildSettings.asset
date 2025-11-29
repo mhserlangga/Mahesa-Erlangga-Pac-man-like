@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Project/Scenes/ProjectMainMenu.unity
     guid: 747bcd8d48f3533429c3592fe2ecc14b
   - enabled: 1
+    path: Assets/Project/Scenes/ProjectTutorScene.unity
+    guid: b24d738ff49c08f4f8cf46574db0632b
+  - enabled: 1
     path: Assets/Project/Scenes/BlockoutProject.unity
     guid: bc62f9c156697ad4095e29ea55618178
   - enabled: 1

@@ -6,11 +6,11 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField]
-    private string _gameSceneName;
+    private string _tutorSceneName;
 
     public void Play()
     {
-        SceneManager.LoadScene(_gameSceneName);
+        SceneManager.LoadScene(_tutorSceneName);
     }
 
     public void Quit()

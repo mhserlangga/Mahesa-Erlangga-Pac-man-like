@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fff1a330ba70fa4cb2eb3feaa81e5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameSceneName: BlockoutProject
+  _tutorSceneName: ProjectTutorScene
 --- !u!4 &288712213
 Transform:
   m_ObjectHideFlags: 0
